@@ -1,0 +1,21 @@
+kubectl get ns
+#kubectl delete namespace simpleapi-hc-ns
+kubectl create ns simpleapi-hc-ns
+
+
+#Config map
+kubectl create configmap aicv2-serviceconfigs -n simpleapi-hc-ns --from-file=simpleapi.json
+
+#DocumentSearch Service
+kubectl create -f simpleapi-deploy.yaml  -n simpleapi-hc-ns
+
+kubectl get svc,pods -n simpleapi-hc-ns
+
+http://localhost:30006/api/hello?name=alex
+
+++++++++++++++++++++++
+
+docker build --rm -f "Dockerfile-1" -t samplewebapidemo:v3 .
+
+docker tag samplewebapidemo:v3 harshalschaudhari/sampleapi
+docker push  harshalschaudhari/sampleapi

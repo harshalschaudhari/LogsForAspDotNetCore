@@ -1,0 +1,169 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+PS C:\SampleWebApiDemo> docker build --rm -f "Dockerfile-1" -t samplewebapidemo:v3 .
+Sending build context to Docker daemon  1.439MB
+Step 1/12 : FROM microsoft/dotnet:2.1-sdk AS build
+ ---> d14ca4022ef8
+Step 2/12 : WORKDIR /app
+ ---> Using cache
+ ---> 3013e9cf7b47
+Step 3/12 : EXPOSE 8007
+ ---> Running in deef84a67016
+Removing intermediate container deef84a67016
+ ---> 4c19c522998b
+Step 4/12 : COPY *.sln .
+COPY failed: no source files were specified
+PS C:\SampleWebApiDemo> cd ..
+PS C:\H_Workspace\02_poc\SampleWebApiDemo> docker build --rm -f "Dockerfile-1" -t samplewebapidemo:v3 .
+unable to prepare context: unable to evaluate symlinks in Dockerfile path: GetFileAttributesEx C:\Dockerfile-1: The system cannot find the file specified.
+PS C:\H_Workspace\02_poc\SampleWebApiDemo> cd .\SampleWebApiDemo\
+PS C:\SampleWebApiDemo> dir
+
+
+    Directory: C:\SampleWebApiDemo
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+d-----       17-12-2018     04:38                bin
+d-----       18-12-2018     04:56                Controllers
+d-----       18-12-2018     04:58                Helper
+d-----       18-12-2018     06:31                obj
+d-----       26-11-2018     06:35                Properties
+d-----       26-11-2018     06:35                wwwroot
+-a----       18-12-2018     04:04            172 appsettings.json
+-a----       17-12-2018     05:08            394 Dockerfile
+-a----       18-12-2018     06:44            479 Dockerfile-1
+-a----       18-12-2018     03:53            635 Program.cs
+-a----       18-12-2018     04:53            947 SampleWebApiDemo.csproj
+-a----       18-12-2018     02:03           1187 SampleWebApiDemo.csproj.user
+-a----       18-12-2018     06:19           2071 Startup.cs
+
+
+PS C:\SampleWebApiDemo> docker build --rm -f "Dockerfile-1" -t samplewebapidemo:v3 .
+Sending build context to Docker daemon  1.439MB
+Step 1/12 : FROM microsoft/dotnet:2.1-sdk AS build
+ ---> d14ca4022ef8
+Step 2/12 : WORKDIR /app
+ ---> Using cache
+ ---> 3013e9cf7b47
+Step 3/12 : EXPOSE 8007
+ ---> Using cache
+ ---> 4c19c522998b
+Step 4/12 : COPY *.sln .
+COPY failed: no source files were specified
+PS C:\SampleWebApiDemo> docker build --rm -f "Dockerfile-1" -t samplewebapidemo:v3 .
+Sending build context to Docker daemon  1.996MB
+Step 1/11 : FROM microsoft/dotnet:2.1-sdk AS build
+ ---> d14ca4022ef8
+Step 2/11 : WORKDIR /app
+ ---> Using cache
+ ---> 3013e9cf7b47
+Step 3/11 : EXPOSE 8007
+ ---> Using cache
+ ---> 4c19c522998b
+Step 4/11 : COPY *.csproj ./
+ ---> d08aa1db0f7b
+Step 5/11 : RUN dotnet restore SampleWebApiDemo.csproj
+ ---> Running in 1b63257eb68a
+  Restoring packages for /app/SampleWebApiDemo.csproj...
+  Installing Microsoft.VisualStudio.Web.CodeGeneration.Contracts 2.1.1.
+  Installing Microsoft.VisualStudio.Web.CodeGeneration.Utils 2.1.1.
+  Installing Microsoft.VisualStudio.Web.CodeGeneration.Templating 2.1.1.
+  Installing Microsoft.VisualStudio.Web.CodeGeneration.Core 2.1.1.
+  Installing Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore 2.1.1.
+  Installing Microsoft.VisualStudio.Web.CodeGeneration 2.1.1.
+  Installing Microsoft.VisualStudio.Web.CodeGenerators.Mvc 2.1.1.
+  Installing Elasticsearch.Net 6.0.0.
+  Installing Serilog.Sinks.PeriodicBatching 2.1.1.
+  Installing Serilog.Sinks.RollingFile 3.3.0.
+  Installing Serilog.Sinks.File 4.0.0.
+  Installing Microsoft.VisualStudio.Web.CodeGeneration.Design 2.1.1.
+  Installing Serilog.Sinks.Elasticsearch 6.5.0.
+  Installing Serilog 2.7.1.
+  Installing Serilog.Sinks.Console 3.1.1.
+  Installing Microsoft.VisualStudio.Azure.Containers.Tools.Targets 1.0.1916590.
+  Generating MSBuild file /app/obj/SampleWebApiDemo.csproj.nuget.g.props.
+  Generating MSBuild file /app/obj/SampleWebApiDemo.csproj.nuget.g.targets.
+  Restore completed in 2.24 min for /app/SampleWebApiDemo.csproj.
+Removing intermediate container 1b63257eb68a
+ ---> f210001e7d95
+Step 6/11 : COPY . ./
+ ---> 5af2154a05a0
+Step 7/11 : RUN dotnet publish -c Release -o out
+ ---> Running in 0d4980e4f913
+Microsoft (R) Build Engine version 15.8.166+gd4e8d81a88 for .NET Core
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Restoring packages for /app/SampleWebApiDemo.csproj...
+  Generating MSBuild file /app/obj/SampleWebApiDemo.csproj.nuget.g.props.
+  Generating MSBuild file /app/obj/SampleWebApiDemo.csproj.nuget.g.targets.
+  Restore completed in 24.11 sec for /app/SampleWebApiDemo.csproj.
+  SampleWebApiDemo -> /app/bin/Release/netcoreapp2.1/SampleWebApiDemo.dll
+  SampleWebApiDemo -> /app/out/
+Removing intermediate container 0d4980e4f913
+ ---> 9349c0af6177
+Step 8/11 : FROM microsoft/dotnet:2.1.2-aspnetcore-runtime AS runtime
+ ---> 0d8b97cd8acd
+Step 9/11 : WORKDIR /app
+ ---> Using cache
+ ---> ded94a580b29
+Step 10/11 : COPY --from=build /app/SampleWebApiDemo/out ./
+COPY failed: stat /var/lib/docker/overlay2/32127b8c4014e5d410f268a90f4cf88b0ab68b4fb10ea3881157b7aae42bef2b/merged/app/SampleWebApiDemo/out: no such file or directory
+PS C:\SampleWebApiDemo> docker build --rm -f "Dockerfile-1" -t samplewebapidemo:v3 .
+Sending build context to Docker daemon  1.996MB
+Step 1/11 : FROM microsoft/dotnet:2.1-sdk AS build
+ ---> d14ca4022ef8
+Step 2/11 : WORKDIR /app
+ ---> Using cache
+ ---> 3013e9cf7b47
+Step 3/11 : EXPOSE 8007
+ ---> Using cache
+ ---> 4c19c522998b
+Step 4/11 : COPY *.csproj ./
+ ---> Using cache
+ ---> d08aa1db0f7b
+Step 5/11 : RUN dotnet restore SampleWebApiDemo.csproj
+ ---> Using cache
+ ---> f210001e7d95
+Step 6/11 : COPY . ./
+ ---> 56c5128ab5a8
+Step 7/11 : RUN dotnet publish -c Release -o out
+ ---> Running in 7f5cd71e71a3
+Microsoft (R) Build Engine version 15.8.166+gd4e8d81a88 for .NET Core
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Restoring packages for /app/SampleWebApiDemo.csproj...
+  Generating MSBuild file /app/obj/SampleWebApiDemo.csproj.nuget.g.props.
+  Generating MSBuild file /app/obj/SampleWebApiDemo.csproj.nuget.g.targets.
+  Restore completed in 2.61 sec for /app/SampleWebApiDemo.csproj.
+  SampleWebApiDemo -> /app/bin/Release/netcoreapp2.1/SampleWebApiDemo.dll
+  SampleWebApiDemo -> /app/out/
+Removing intermediate container 7f5cd71e71a3
+ ---> b508162a2d62
+Step 8/11 : FROM microsoft/dotnet:2.1.2-aspnetcore-runtime AS runtime
+ ---> 0d8b97cd8acd
+Step 9/11 : WORKDIR /app
+ ---> Using cache
+ ---> ded94a580b29
+Step 10/11 : COPY --from=build /app/out .
+ ---> da475ef33efa
+Step 11/11 : ENTRYPOINT ["dotnet", "SampleWebApiDemo.dll"]
+ ---> Running in 5c741e61aca6
+Removing intermediate container 5c741e61aca6
+ ---> 7006c17eee00
+Successfully built 7006c17eee00
+Successfully tagged samplewebapidemo:v3
+SECURITY WARNING: You are building a Docker image from Windows against a non-Windows Docker host. All files and directories added to build context will have '-rwxr-xr-x' permissions. It is recommended to double check and reset permissions for sensitive files and directories.
+PS C:\SampleWebApiDemo> docker tag samplewebapidemo:v3 harshalschaudhari/sampleapi
+PS C:\SampleWebApiDemo> docker push  harshalschaudhari/sampleapi
+The push refers to repository [docker.io/harshalschaudhari/sampleapi]
+58b35cace018: Pushed
+656d180493d8: Pushed
+e901142a9385: Layer already exists
+7cba443b4617: Layer already exists
+489126501d2f: Layer already exists
+cdb3f9544e4c: Layer already exists
+latest: digest: sha256:243c0fa26d802f4868c93f143a8c3a9df0ca88c82305997d6a6dd6926a85d4b5 size: 1581
+PS C:\SampleWebApiDemo>
